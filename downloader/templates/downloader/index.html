@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/9f9f72b116.js" crossorigin="anonymous"></script>
+    
+    <style>
+
+        .poppins-regular {
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding-top: 90px;
+            padding-bottom: 40px;
+            background-image: url(https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhelh5KMvn6De9Kx5SgdPG2luWHWFSkd3dLLvIPVbEDODvZIl-gw_Tyu0CSRHRHVfHw1Y_QJ_GzgUG5zYjSm6aUr-hX4Gw8SmTndwwTl_jfrc0bORhiCH7dQYmCgXh3Uk3ukIiZV05Nv37U/w7680-h4320-c/abstract-13-4k.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;  
+            background-size: cover;
+            margin: 0;
+        }
+
+        #container {
+            width: 80%;
+            max-width: 900px;
+            background-color: rgba(0, 0, 0, 0.281); /* Adjust the last value (0.8) for transparency */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: opacity 0.3s ease, transform 0.3s ease; /* Added transition for opacity and transform */
+            opacity: 1; /* Start with opacity 1 */
+            transform: translateY(0); /* Start with no transformation */
+        }
+
+        #linkForm {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        
+        #linkForm input {
+            width: calc(70% - 25px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        #linkForm button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: #184759;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-top: -10px;
+            margin-left: 10px;
+            min-width: 100px;
+        }
+        #linkForm button .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        #linkForm button:hover {
+            background-color: #133542;
+        }
+        #videoDetails {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        #videoDetails.show {
+            display: flex;
+        }
+        #videoDetails img {
+            max-width: 30%;
+            border-radius: 20px;
+            margin-right: 15px;
+            margin-left: 35px;
+            margin-bottom: 10px;
+            
+        }
+        #videoInfo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        #videoTitle {
+            max-width: 70%;
+            padding-right: 50px;
+            text-align: left;
+            font-size: larger;
+            font-weight: bold;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        th {
+            background-color: #f2f2f269;
+        }
+        .download-form {
+            display: inline-block;
+            position: relative;
+            width: 100%;
+        }
+        .download-button {
+            padding: 10px 5px;
+            background-color: #184759;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .download-button:hover {
+            background-color: #133644;
+        }
+        .download-button .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            animation: spin 1s linear infinite;
+            margin-right: 5px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .download-complete {
+            display: none;
+            color: green;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        /* switch box code */
+
+        :root {
+            --switches-bg-color: #133644;
+            --switches-label-color: white ;
+            --switch-bg-color: white;
+            --switch-text-color: #133644 ;
+        }
+
+        
+
+
+        /* container for all of the switch elements 
+            - adjust "width" to fit the content accordingly 
+        */
+        .switches-container {
+            width: 16rem;
+            position: relative;
+            align-items: center;
+            display: flex;
+            padding: 0;
+            position: relative;
+            background: var(--switches-bg-color);
+            line-height: 3rem;
+            border-radius: 3rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* input (radio) for toggling. hidden - use labels for clicking on */
+        .switches-container input {
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+        }
+
+        /* labels for the input (radio) boxes - something to click on */
+        .switches-container label {
+            width: 50%;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            cursor: pointer;
+            color: var(--switches-label-color);
+        }
+
+        /* switch highlighters wrapper (sliding left / right) 
+            - need wrapper to enable the even margins around the highlight box
+        */
+        .switch-wrapper {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            padding: 0.15rem;
+            z-index: 3;
+            transition: transform .5s cubic-bezier(.77, 0, .175, 1);
+            /* transition: transform 1s; */
+        }
+
+        /* switch box highlighter */
+        .switch {
+            border-radius: 3rem;
+            background: var(--switch-bg-color);
+            height: 100%;
+        }
+
+        /* switch box labels
+            - default setup
+            - toggle afterwards based on radio:checked status 
+        */
+        .switch div {
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            display: block;
+            color: var(--switch-text-color) ;
+            transition: opacity .2s cubic-bezier(.77, 0, .175, 1) .125s;
+            will-change: opacity;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* slide the switch box from right to left */
+        .switches-container input:nth-of-type(1):checked~.switch-wrapper {
+            transform: translateX(0%);
+        }
+
+        /* slide the switch box from left to right */
+        .switches-container input:nth-of-type(2):checked~.switch-wrapper {
+            transform: translateX(100%);
+        }
+
+        /* toggle the switch box labels - first checkbox:checked - show first switch div */
+        .switches-container input:nth-of-type(1):checked~.switch-wrapper .switch div:nth-of-type(1) {
+            opacity: 1;
+        }
+
+        /* toggle the switch box labels - second checkbox:checked - show second switch div */
+        .switches-container input:nth-of-type(2):checked~.switch-wrapper .switch div:nth-of-type(2) {
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .typewriter h1 {
+            font-size: 2em;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 4px solid #000;
+            animation: typing 4s steps(100, end) infinite, blink 0.75s step-end infinite;
+            display: inline;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            70% { border-color: #184759; }
+        }
+        
+    </style>
+    
+</head>
+<body class="poppins-regular">
+    <div id="container" class="poppins-regular">
+        <br>
+        <div class="typewriter">
+            <h1><span class="constant" style="color: white;"><i class="fa-brands fa-youtube"></i> YouTube </span><span class="dynamic" id="typewriter-text" style="color: white;">Video Downloader</span></h1>
+        </div>
+        <br>
+        <form id="linkForm" method="post" action="{% url 'fetch_video' %}">
+            {% csrf_token %}
+            <input type="text" name="video_url" class="poppins-regular" placeholder="Enter YouTube URL" required>
+            <button type="submit" class="poppins-regular">
+                <div class="loader"></div>
+                <span class="button-text"><i class="fa-solid fa-right-from-bracket"></i> Fetch Video</span>
+            </button>
+
+        </form>
+        <div id="videoDetails"></div>
+        <div id="loading" style="display: none;">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <script>
+        //script work for typewriter
+
+        const texts = ["Video Downloader", "Audio Downloader"];
+        let index = 0;
+        const typewriterElement = document.getElementById('typewriter-text');
+        const typingSpeed = 100; // Adjust typing speed (in milliseconds)
+        const pauseBetweenTexts = 2000; // Adjust pause between texts (in milliseconds)
+
+        function type() {
+            const text = texts[index];
+            let charIndex = 0;
+            typewriterElement.textContent = '';
+            
+            function typeCharacter() {
+                typewriterElement.textContent += text.charAt(charIndex);
+                charIndex++;
+                if (charIndex < text.length) {
+                    setTimeout(typeCharacter, typingSpeed);
+                } else {
+                    setTimeout(deleteText, pauseBetweenTexts);
+                }
+            }
+            
+            function deleteText() {
+                let charIndex = text.length - 1;
+                
+                function deleteCharacter() {
+                    typewriterElement.textContent = text.slice(0, charIndex);
+                    charIndex--;
+                    if (charIndex >= 0) {
+                        setTimeout(deleteCharacter, typingSpeed);
+                    } else {
+                        index = (index + 1) % texts.length;
+                        setTimeout(type, pauseBetweenTexts);
+                    }
+                }
+                
+                deleteCharacter();
+            }
+            
+            typeCharacter();
+        }
+
+        type();
+        //end code for typewriter
+        document.getElementById('linkForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const fetchButton = this.querySelector('button');
+            const loader = fetchButton.querySelector('.loader');
+            const buttonText = fetchButton.querySelector('.button-text');
+
+            loader.style.display = 'inline-block';
+            buttonText.textContent = 'Fetching...';
+            fetchButton.disabled = true;
+
+            document.getElementById('videoDetails').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            fetch("{% url 'fetch_video' %}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+                buttonText.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Fetch Video';
+                fetchButton.disabled = false;
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('videoDetails').style.display = 'flex';
+                document.getElementById('videoDetails').classList.add('show');
+                if (data.error) {
+                    document.getElementById('videoDetails').innerHTML = `<p>Error: ${data.error}</p>`;
+                } else {
+                    document.getElementById('videoDetails').innerHTML = `
+                        <div id="videoInfo">
+                            <img src="${data.thumbnail_url}" alt="Thumbnail">
+                            <div id="videoTitle">
+                                <h2ana>${data.title}</h2>
+                            </div>
+                            <br>
+                        </div>
+                        <br>
+                        <div class="switches-container">
+                            <input type="radio" id="switchVideo" name="switchPlan" value="Video" checked onchange="toggleTables()" />
+                            <input type="radio" id="switchAudio" name="switchPlan" value="Audio" onchange="toggleTables()"/>
+                            <label for="switchVideo"><i class="fa-solid fa-film"></i> Video</label>
+                            <label for="switchAudio"><i class="fa-solid fa-music"></i> Audio</label>
+                            <div class="switch-wrapper">
+                                <div class="switch">
+                                <div><i class="fa-solid fa-film"></i> Video</div>
+                                <div><i class="fa-solid fa-music"></i> Audio</div>
+                                </div>
+                            </div>
+                            </div>
+                            <br>
+                        <table id="videoTable">
+                            <thead>
+                                <tr>
+                                    <th style="color: white;">Resolution</th>
+                                    <th style="color: white;">Video Size</th>
+                                    <th style="color: white;">Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.streams.map(stream => `
+                                    <tr style="color: white;">
+                                        <td style="color: white;">${stream.resolution}</td>
+                                        <td style="color: white;">${stream.filesize}</td>
+                                        <td>
+                                            <form class="download-form" method="post" action="{% url 'download_video' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="video_url" value="${formData.get('video_url')}">
+                                                <input type="hidden" name="resolution" value="${stream.resolution}">
+                                                <input type="hidden" name="title" value="${data.title}">
+                                                <button type="submit" class="download-button">
+                                                    <div class="loader"></div>
+                                                    <div class="download-complete">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </div>
+                                                    <span class="button-text"><i class="fa fa-download"></i> Download</span>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <table id="audioTable" class="hidden">
+                            <thead>
+                                <tr>
+                                    <th style="color: white;">Audio Bitrate</th>
+                                    <th style="color: white;">Audio Size</th>
+                                    <th style="color: white;">Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.audio_streams.map(stream => `
+                                    <tr>
+                                        <td style="color: white;">${stream.bitrate} kbps</td>
+                                        <td style="color: white;">${stream.filesize}</td>
+                                        <td>
+                                            <form class="download-form" method="post" action="{% url 'download_audio' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="video_url" value="${formData.get('video_url')}">
+                                                <input type="hidden" name="bitrate" value="${stream.bitrate}">
+                                                <input type="hidden" name="title" value="${data.title}">
+                                                <button type="submit" class="download-button">
+                                                    <div class="loader"></div>
+                                                    <div class="download-complete">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </div>
+                                                    <span class="button-text"><i class="fa fa-download"></i> Download</span>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                }
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                buttonText.textContent = 'Fetch Video';
+                fetchButton.disabled = false;
+                alert('Failed to fetch video details.');
+            });
+        };
+
+        function toggleTables() {
+            const videoTable = document.getElementById('videoTable');
+            const audioTable = document.getElementById('audioTable');
+            const switchVideo = document.getElementById('switchVideo');
+            const switchAudio = document.getElementById('switchAudio');
+
+            if (switchAudio.checked) {
+                videoTable.classList.add('hidden');
+                audioTable.classList.remove('hidden');
+            } else {
+                videoTable.classList.remove('hidden');
+                audioTable.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('submit', function(event) {
+    if (event.target.classList.contains('download-form')) {
+        event.preventDefault();
+        const form = event.target;
+        const button = form.querySelector('.download-button');
+        const buttonText = button.querySelector('.button-text');
+        const loader = button.querySelector('.loader');
+        const tickIcon = button.querySelector('.download-complete');
+        const downloadIcon = button.querySelector('.fa.fa-download');
+        
+
+        button.disabled = true;
+        buttonText.innerText = 'Downloading';
+        loader.style.display = 'block';
+
+        const formData = new FormData(form);
+        const isAudio = form.action.includes('download_audio');
+        const fileExtension = isAudio ? 'mp3' : 'mp4';  // Determine file extension based on the action
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `${formData.get('title')}.${fileExtension}`;  // Use correct extension
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            // Remove download complete text and icon after a delay
+            setTimeout(() => {
+                tickIcon.style.display = 'none';
+                buttonText.innerHTML = '<i class="fa-solid fa-download"></i> Download';
+                button.disabled = false;
+            }, 3000); // Reset button after 3 seconds
+
+            buttonText.innerText = 'Download Complete';
+            loader.style.display = 'none';
+            tickIcon.style.display = 'inline-block';
+            // Hide the download icon initially
+            downloadIcon.style.display = 'none';
+        })
+        .catch(() => {
+            buttonText.innerText = 'Download';
+            loader.style.display = 'none';
+            button.disabled = false;
+            alert('Failed to download.');
+        });
+    }
+});
+
+    </script>
+</body>
+</html>

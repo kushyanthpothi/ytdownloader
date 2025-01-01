@@ -1,0 +1,21 @@
+Commands to run this project
+
+--> open Command prompt with the folder directory
+
+--> then type ".\venv\Scripts\Activate"
+
+--> then type "pip freeze > requirements.txt"
+
+Note: make sure that ffmpeg must be there in downloader folder in youtube_downloader folder
+
+ffmpeg download link: https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip
+
+--> after downloading the ffmpeg from the link just extract it after that go to inside the folder and copy the ffmpeg folder and paste in downloader folder in youtube_downloader folder
+
+--> then type command in cmd "python manage.py runserver"
+
+Note: this works on windows
+
+
+
+
