@@ -1,6 +1,0 @@
-*.file-extension filter=lfs diff=lfs merge=lfs -text
-downloader/ffmpeg/ffmpeg/bin/*.exe filter=lfs diff=lfs merge=lfs -text
-downloader/ffmpeg/ffmpeg/bin/ffmpeg.exe filter=lfs diff=lfs merge=lfs -text
-downloader/ffmpeg/ffmpeg/bin/ffprobe.exe filter=lfs diff=lfs merge=lfs -text
-downloader/ffmpeg/ffmpeg/bin/ffplay.exe filter=lfs diff=lfs merge=lfs -text
-*.exe filter=lfs diff=lfs merge=lfs -text
